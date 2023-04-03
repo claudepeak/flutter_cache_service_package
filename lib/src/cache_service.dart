@@ -37,7 +37,7 @@ class CacheService {
       final file = File(filePath);
 
       if (await file.exists()) {
-        return CacheBaseModel(isCached: true, file: file);
+        return CacheBaseModel(status: true, file: file);
       } else {
         final httpClient = HttpClient();
         final request = await httpClient.getUrl(Uri.parse(url));
@@ -46,18 +46,18 @@ class CacheService {
           final bytes = await consolidateHttpClientResponseBytes(response);
           await file.writeAsBytes(bytes);
 
-          return CacheBaseModel(isCached: true, file: file);
+          return CacheBaseModel(status: true, file: file);
         } else {
           final response = await request.close();
           if (isFile == null || !isFile) {
             final body = await response.transform(utf8.decoder).join();
 
-            return CacheBaseModel(isCached: false, file: body);
+            return CacheBaseModel(status: false, file: body);
           } else {
             final bytes = await consolidateHttpClientResponseBytes(response);
             await file.writeAsBytes(bytes);
 
-            return CacheBaseModel(isCached: true, file: file);
+            return CacheBaseModel(status: true, file: file);
           }
         }
       }
@@ -67,6 +67,7 @@ class CacheService {
     }
   }
 
+  /// This method is getting a file from the cache.
   Future<File> getFileFromLocale(String fileName) async {
     final directory = await getApplicationDocumentsDirectory();
     final filePath = '${directory.path}/$fileName';
@@ -75,11 +76,31 @@ class CacheService {
     return file;
   }
 
+  /// This method is checking if a file exists in the cache.
   Future<bool> isFileExist(String fileName) async {
     final directory = await getApplicationDocumentsDirectory();
     final filePath = '${directory.path}/$fileName';
     final file = File(filePath);
 
     return await file.exists();
+  }
+
+  /// This method is deleting a file from the cache.
+  Future<void> deleteFile(String fileName) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final filePath = '${directory.path}/$fileName';
+    final file = File(filePath);
+
+    await file.delete();
+  }
+
+  /// This method is deleting all files from the cache.
+  Future<void> deleteAllFiles() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final files = directory.listSync();
+
+    for (final file in files) {
+      await file.delete();
+    }
   }
 }

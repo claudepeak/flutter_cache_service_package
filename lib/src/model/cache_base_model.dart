@@ -1,10 +1,10 @@
 class CacheBaseModel {
-  final bool isCached;
+  final bool status;
 
   final dynamic file;
 
   CacheBaseModel({
-    required this.isCached,
+    required this.status,
     required this.file,
   });
 }

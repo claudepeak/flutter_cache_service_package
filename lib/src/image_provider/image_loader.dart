@@ -33,7 +33,7 @@ class _CachedImageProviderState extends State<CachedImageLoader> {
         if (snapshot.hasData) {
           final cacheBaseModel = snapshot.data as CacheBaseModel;
 
-          return cacheBaseModel.isCached
+          return cacheBaseModel.status
               ? Image.file(
                   cacheBaseModel.file,
                   errorBuilder: (context, error, stackTrace) => widget.errorWidget ?? const Icon(Icons.error_outline),
