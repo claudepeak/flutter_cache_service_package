@@ -1,40 +1,31 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Cache Service
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+This service searches for a file in the cache from the given URL, and returns it if it exists. 
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
+If the file does not exist in the cache, it downloads it, saves it, and returns it.
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+This way, the existence of the file can be checked in the cache first, and downloaded if it is not there.
 
-## Features
+Separating the cache mechanism into a separate class improves the readability of the code.
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+**E.g :**
 
-## Getting started
+    final cacheService = CacheService();
+    final file = await cacheService.getOrDownloadFile('http://example.com/file.mp3', 'file.mp3');
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
 
-## Usage
+### Methods 
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+`getOrDownloadFile(String url, String fileName, [bool? cacheEnabled, bool? isFile])` 
 
-```dart
-const like = 'sample';
-```
+Searches for a file in the cache from the given URL, and returns it if it exists. If the file does not exist in the cache, it downloads it, saves it, and returns it. By this way, the existence of the file can be checked in the cache first, and downloaded if it is not there. Separating the cache mechanism into a separate class improves the readability of the code.
 
-## Additional information
+#### Parameters:
+-   url : String - URL of the file to be downloaded
+-   fileName : String - Name of the file
+-   cacheEnabled : bool? (optional) - Is caching enabled?
+-   isFile : bool? (optional) - Is the downloaded data a file or text.
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
-# cache_service_package
+#### Return Value:
+
+-   CacheBaseModel - CacheBaseModel object containing the status (whether the operation is successful or not) and file information.
